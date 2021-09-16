@@ -28,6 +28,7 @@ class csr_t {
   // permission checking needed or allowed.
   // Child classes must implement unlogged_write()
   void write(const reg_t val) noexcept;
+  reg_t *get_addr() { return nullptr; }
 
   virtual ~csr_t();
 
@@ -62,6 +63,7 @@ class basic_csr_t: public csr_t {
  public:
   basic_csr_t(processor_t* const proc, const reg_t addr, const reg_t init);
   virtual reg_t read() const noexcept override;
+  reg_t *get_addr() { return &val; }
  protected:
   virtual bool unlogged_write(const reg_t val) noexcept override;
  private:
@@ -83,6 +85,8 @@ class pmpaddr_csr_t: public csr_t {
 
   // Is the specified access allowed given the pmpcfg privileges?
   bool access_ok(access_type type, reg_t mode) const noexcept;
+
+  reg_t *get_addr() { return &val; }
 
  protected:
   virtual bool unlogged_write(const reg_t val) noexcept override;
@@ -147,6 +151,7 @@ class epc_csr_t: public csr_t {
   epc_csr_t(processor_t* const proc, const reg_t addr);
 
   virtual reg_t read() const noexcept override;
+  reg_t *get_addr() { return &val; }
  protected:
   virtual bool unlogged_write(const reg_t val) noexcept override;
  private:
@@ -160,6 +165,7 @@ class tvec_csr_t: public csr_t {
   tvec_csr_t(processor_t* const proc, const reg_t addr);
 
   virtual reg_t read() const noexcept override;
+  reg_t *get_addr() { return &val; }
  protected:
   virtual bool unlogged_write(const reg_t val) noexcept override;
  private:
@@ -201,6 +207,7 @@ class vsstatus_csr_t: public base_status_csr_t {
  public:
   vsstatus_csr_t(processor_t* const proc, const reg_t addr);
   virtual reg_t read() const noexcept override;
+  reg_t *get_addr() { return &val; }
  protected:
   virtual bool unlogged_write(const reg_t val) noexcept override;
  private:
@@ -285,6 +292,7 @@ class mip_or_mie_csr_t: public csr_t {
   virtual reg_t read() const noexcept override final;
 
   void write_with_mask(const reg_t mask, const reg_t val) noexcept;
+  reg_t *get_addr() { return &val; }
 
  protected:
   virtual bool unlogged_write(const reg_t val) noexcept override final;
