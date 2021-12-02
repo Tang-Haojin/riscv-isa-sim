@@ -217,6 +217,9 @@ tlb_entry_t mmu_t::refill_tlb(reg_t vaddr, reg_t paddr, char* host_addr, access_
 
 bool mmu_t::pmp_ok(reg_t addr, reg_t len, access_type type, reg_t mode)
 {
+#ifdef NO_PMP
+  return true;
+#else
   if (!proc || proc->n_pmp == 0)
     return true;
 
@@ -241,6 +244,7 @@ bool mmu_t::pmp_ok(reg_t addr, reg_t len, access_type type, reg_t mode)
   }
 
   return mode == PRV_M;
+#endif
 }
 
 reg_t mmu_t::pmp_homogeneous(reg_t addr, reg_t len)
@@ -250,10 +254,11 @@ reg_t mmu_t::pmp_homogeneous(reg_t addr, reg_t len)
 
   if (!proc)
     return true;
-
+#ifndef NO_PMP
   for (size_t i = 0; i < proc->n_pmp; i++)
     if (proc->state.pmpaddr[i]->subset_match(addr, len))
       return false;
+#endif
 
   return true;
 }

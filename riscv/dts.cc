@@ -56,7 +56,11 @@ std::string make_dts(size_t insns_per_rtc_tick, size_t cpu_hz,
          "      compatible = \"riscv\";\n"
          "      riscv,isa = \"" << procs[i]->get_isa_string() << "\";\n"
          "      mmu-type = \"riscv," << (procs[i]->get_max_xlen() <= 32 ? "sv32" : "sv48") << "\";\n"
+#ifdef NO_PMP
+         "      riscv,pmpregions = <0>;\n"
+#else
          "      riscv,pmpregions = <16>;\n"
+#endif
          "      riscv,pmpgranularity = <4>;\n"
          "      clock-frequency = <" << cpu_hz << ">;\n"
          "      CPU" << i << "_intc: interrupt-controller {\n"

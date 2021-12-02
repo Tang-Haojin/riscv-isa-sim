@@ -145,8 +145,12 @@ reg_t pmpaddr_csr_t::tor_paddr() const noexcept {
 
 
 reg_t pmpaddr_csr_t::tor_base_paddr() const noexcept {
+#ifdef NO_PMP
+  return 0;
+#else
   if (pmpidx == 0) return 0;  // entry 0 always uses 0 as base
   return state->pmpaddr[pmpidx-1]->tor_paddr();
+#endif
 }
 
 
@@ -211,6 +215,9 @@ reg_t pmpcfg_csr_t::read() const noexcept {
 }
 
 bool pmpcfg_csr_t::unlogged_write(const reg_t val) noexcept {
+#ifdef NO_PMP
+  return false;
+#else
   if (proc->n_pmp == 0)
     return false;
 
@@ -229,6 +236,7 @@ bool pmpcfg_csr_t::unlogged_write(const reg_t val) noexcept {
   }
   proc->get_mmu()->flush_tlb();
   return write_success;
+#endif
 }
 
 

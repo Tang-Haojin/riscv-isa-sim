@@ -212,8 +212,11 @@ struct state_t
   mcontrol_t mcontrol[num_triggers];
   tdata2_csr_t_p tdata2;
   bool debug_mode;
-
+#ifdef NO_PMP
+  static const int max_pmp = 0;
+#else
   static const int max_pmp = 16;
+#endif
   pmpaddr_csr_t_p pmpaddr[max_pmp];
 
   csr_t_p fflags;
