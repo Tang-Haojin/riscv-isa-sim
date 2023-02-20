@@ -55,7 +55,7 @@ std::string make_dts(size_t insns_per_rtc_tick, size_t cpu_hz,
          "      status = \"okay\";\n"
          "      compatible = \"riscv\";\n"
          "      riscv,isa = \"" << procs[i]->get_isa_string() << "\";\n"
-         "      mmu-type = \"riscv," << (procs[i]->get_max_xlen() <= 32 ? "sv32" : "sv48") << "\";\n"
+         "      mmu-type = \"riscv," << (procs[i]->get_max_xlen() <= 32 ? "sv32" : "sv39") << "\";\n"
 #ifdef NO_PMP
          "      riscv,pmpregions = <0>;\n"
 #else
