@@ -129,7 +129,7 @@ std::string dts_compile(const std::string& dts)
       }
     }
     close(dts_pipe[1]);
-    exit(0);
+    _exit(0);
   }
 
   pid_t dtb_pid;
